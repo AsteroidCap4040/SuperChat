@@ -1,0 +1,7 @@
+Django>=4.2,<5.0
+gunicorn
+whitenoise
+dj-database-url
+python-dotenv
+psycopg2-binary
+cohere

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperChat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --chat-bg: #e0e0e0;
+      --hover-bg: #c0c0c0;
+    }
+
+    body.dark-mode {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --chat-bg: #2e2e2e;
+      --hover-bg: #444444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      height: 100vh;
+      display: flex;
+    }
+
+    .main-body {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 25px 10px;
+      border-bottom: 2px solid var(--text-color);
+    }
+
+    .logo-bar {
+      font-family: 'Saira Stencil One', cursive;
+      font-size: 28px;
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .top-bar button {
+      border: 2px solid var(--text-color);
+      background: none;
+      color: var(--text-color);
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .chatbox-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+      position: relative;
+      align-items: center;
+    }
+
+    .welcome-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .welcome-image {
+      max-width: 250px;
+      margin-bottom: 20px;
+    }
+
+    .welcome-banner {
+      font-size: 70px;
+      font-weight: bold;
+      text-align: center;
+      color: var(--text-color);
+      opacity: 1;
+    }
+
+    .system-msg {
+      text-align: center;
+      font-size: 14px;
+      font-family: monospace;
+      opacity: 0.6;
+      padding: 6px 12px;
+      margin: 10px auto;
+      border-radius: 6px;
+      background-color: var(--chat-bg);
+      color: var(--text-color);
+      border: 1px dashed var(--text-color);
+      width: fit-content;
+    }
+
+    .chat-input-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      border-top: 2px solid var(--text-color);
+      position: relative;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 10px 15px;
+      border-radius: 30px;
+      border: 2px solid var(--text-color);
+      background-color: transparent;
+      color: var(--text-color);
+    }
+
+    .chat-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-actions button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--text-color);
+      background: none;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .chat-actions i {
+      color: var(--text-color);
+    }
+
+    #hero-select {
+      position: absolute;
+      bottom: 90px;
+      right: 25px;
+      background: linear-gradient(135deg, var(--chat-bg), var(--hover-bg));
+      border: 2px solid var(--text-color);
+      border-radius: 16px;
+      padding: 15px 10px;
+      z-index: 1000;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+      display: none;
+      max-height: 300px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-color) transparent;
+    }
+
+    #hero-select::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #hero-select::-webkit-scrollbar-thumb {
+      background-color: var(--text-color);
+      border-radius: 6px;
+    }
+
+    .hero-grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 0;
+      flex-wrap: wrap;
+    }
+
+    .hero-grid img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      object-fit: cover;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      background-color: #fff;
+    }
+
+    .hero-grid img:hover {
+      transform: scale(1.12);
+      border-color: var(--text-color);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    .message {
+      max-width: 60%;
+      padding: 10px 15px;
+      border-radius: 18px;
+      margin: 15px 0 25px 0;
+      font-family: "Goldman", sans-serif;
+      word-wrap: break-word;
+    }
+
+    .user-msg {
+      background-color: var(--chat-bg);
+      color: var(--text-color);
+      margin-left: auto;
+      border-top-right-radius: 0;
+    }
+
+    .bot-msg {
+      background-color: var(--hover-bg);
+      color: var(--text-color);
+      margin-right: auto;
+      border-top-left-radius: 0;
+    }
+  </style>
+</head>
+<body>
+  {% load static %}
+  <div class="main-body">
+    <div class="top-bar">
+      <div class="logo-bar">SUPERCHAT</div>
+      <button id="reset-btn" style="margin-right: 10px;"><i class="fas fa-broom"></i></button>
+      <button id="toggle-theme"><i class="fas fa-moon fa-lg"></i></button>
+    </div>
+
+    <div class="chatbox-body">
+      <div class="welcome-container" id="welcome-container">
+        <img src="{% static 'images/leader.png' %}" alt="Leader" class="welcome-image">
+        <div class="welcome-banner">SELECT YOUR HERO</div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chat-input" placeholder="Type your message...">
+      <div class="chat-actions">
+        <button id="send-btn"><i class="fas fa-paper-plane fa-lg"></i></button>
+        <button id="superhero-btn"><i class="fa-solid fa-mask"></i></button>
+      </div>
+
+      <div id="hero-select">
+        <div class="hero-grid">
+          <img src="{% static 'images/invincible_face.jpg' %}" title="Invincible" alt="Invincible">
+          <img src="{% static 'images/iron_man_face.jpg' %}" title="Iron Man" alt="Iron Man">
+          <img src="{% static 'images/thor_face.jpg' %}" title="Thor" alt="Thor">
+          <img src="{% static 'images/wolverine_face.jpg' %}" title="Wolverine" alt="Wolverine">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const toggleBtn = document.getElementById('toggle-theme');
+  const body = document.body;
+
+  // Apply saved theme on page load
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark-mode');
+    toggleBtn.querySelector('i').classList.remove('fa-moon');
+    toggleBtn.querySelector('i').classList.add('fa-sun');
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    const icon = toggleBtn.querySelector('i');
+    icon.classList.toggle('fa-moon');
+    icon.classList.toggle('fa-sun');
+
+    // Save current theme
+    if (body.classList.contains('dark-mode')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  const heroBtn = document.getElementById('superhero-btn');
+  const heroBox = document.getElementById('hero-select');
+  const chatBody = document.querySelector('.chatbox-body');
+  const welcomeContainer = document.getElementById('welcome-container');
+
+  let selectedHero = null;
+
+  heroBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    heroBox.style.display = heroBox.style.display === 'block' ? 'none' : 'block';
+  });
+
+  window.addEventListener('click', () => {
+    heroBox.style.display = 'none';
+  });
+
+  heroBox.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  document.querySelectorAll('.hero-grid img').forEach(img => {
+    img.addEventListener('click', () => {
+      selectedHero = img.alt;
+      document.querySelector('.logo-bar').textContent = `SUPERCHAT - ${selectedHero.toUpperCase()}`;
+      heroBox.style.display = 'none';
+      welcomeContainer.style.display = 'none';
+
+      const systemMsg = document.createElement('div');
+      systemMsg.classList.add('system-msg');
+      systemMsg.textContent = `------------------------------------------------ You are now talking to ${selectedHero} ------------------------------------------------`;
+      chatBody.appendChild(systemMsg);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    });
+  });
+
+  const sendBtn = document.getElementById('send-btn');
+  const inputField = document.getElementById('chat-input');
+  let isWaiting = false;
+
+  function appendMessage(text, isUser) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', isUser ? 'user-msg' : 'bot-msg');
+    msgDiv.textContent = text;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  sendBtn.addEventListener('click', () => {
+    const text = inputField.value.trim();
+    if (text === "" || isWaiting) return;
+
+    if (welcomeContainer.style.display !== 'none') {
+      welcomeContainer.style.display = 'none';
+    }
+
+    appendMessage(text, true);
+    inputField.value = "";
+    sendBtn.disabled = true;
+    isWaiting = true;
+
+    const botMsgDiv = document.createElement('div');
+    botMsgDiv.classList.add('message', 'bot-msg');
+    chatBody.appendChild(botMsgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    fetch('/api/chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        message: text,
+        hero: selectedHero
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      let reply = data.response || "Sorry, I couldn't think of anything to say.";
+      let i = 0;
+      function typeLetter() {
+        if (i < reply.length) {
+          botMsgDiv.textContent += reply.charAt(i);
+          i++;
+          chatBody.scrollTop = chatBody.scrollHeight;
+          setTimeout(typeLetter, 30);
+        } else {
+          sendBtn.disabled = false;
+          isWaiting = false;
+        }
+      }
+      typeLetter();
+    })
+    .catch(err => {
+      console.error(err);
+      botMsgDiv.textContent = "Oops! Something went wrong.";
+      sendBtn.disabled = false;
+      isWaiting = false;
+    });
+  });
+
+  inputField.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    fetch('/api/chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        message: "__reset__"
+      })
+    }).then(() => {
+      location.reload(); // Reload to reset chat UI
+    });
+  });
+</script>
+
+</body>
+</html>
