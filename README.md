@@ -23,6 +23,6 @@ A Django-based chatbot web app where users can chat with various superheroes lik
 <br>
 <img width="1920" height="880" alt="Screenshot 2025-07-27 at 14-55-22 SuperChat" src="https://github.com/user-attachments/assets/667d34f5-3166-4fce-afc7-26ba509c0e33" />
 
-<br>
+<br><br>
 ## ADD More Heroes :)
 
