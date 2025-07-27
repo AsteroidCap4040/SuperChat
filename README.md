@@ -16,3 +16,10 @@ A Django-based chatbot web app where users can chat with various superheroes lik
 - AI/LLM: [Cohere API](https://cohere.com/)
 - Deployment: [Render](https://render.com/)
 - Version Control: Git & GitHub
+
+<img width="1920" height="880" alt="Screenshot 2025-07-27 at 14-53-35 SuperChat" src="https://github.com/user-attachments/assets/2a957019-87b5-4ef3-bb06-1533755bd662" />
+<br>
+<img width="1920" height="880" alt="Screenshot 2025-07-27 at 14-54-09 SuperChat" src="https://github.com/user-attachments/assets/45e78833-566b-472e-88a0-096c70c4108a" />
+<br>
+<img width="1920" height="880" alt="Screenshot 2025-07-27 at 14-55-22 SuperChat" src="https://github.com/user-attachments/assets/667d34f5-3166-4fce-afc7-26ba509c0e33" />
+
